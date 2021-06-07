@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.qwer.NoticeMapper">
+    <insert id="save" parameterType="Notice" useGeneratedKeys="true" keyProperty="noticeId">
+        insert into notice
+            (title, content, writer, createdDate)
+        values (#{title}, #{content}, #{writer}, #{createdDate})
+
+
+    </insert>
+
+    <select id="read" parameterType="long" resultType="Notice" flushCache="true">
+        select *
+        from Notice
+        where noticeId = #{noticeId}
+    </select>
+
+    <select id="readAll" resultType="Notice">
+        select *
+        from Notice
+    </select>
+
+    <update id="update" parameterType="Notice">
+        update Notice
+        set content = #{content}
+        where noticeId = #{noticeId}
+    </update>
+
+    <delete id="delete" parameterType="long">
+        delete
+        from Notice
+        where noticeId = #{noticeId}
+    </delete>
+
+    <select id="sortedNotice" resultType="Notice">
+        select *
+        from Notice
+        order by noticeId DESC
+    </select>
+
+    <select id="total" resultType="int">
+        select count(*)
+        from Notice
+    </select>
+
+    <select id="pagedNotice" parameterType="PageRequest" resultType="Notice">
+        select *
+        from Notice
+        <if test="direction == 'ASC'">
+            order by #{sort} ASC
+        </if>
+        <if test="direction == 'DESC'">
+            order by #{sort} DESC
+        </if>
+        limit #{size}
+        offset #{offset}
+    </select>
+
+</mapper>
